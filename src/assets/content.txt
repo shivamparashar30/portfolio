@@ -1,0 +1,71 @@
+--------Header section --------------
+# Menus
+Projects
+Technologies
+About me
+
+--------banner section--------------
+# heading
+Hello, I'm Shivam, 
+React Native developer
+## sub heading
+I am a skilled React Native developer specializing in creating efficient, user-friendly mobile applications with a focus on social impact and community engagement.
+
+
+--------Projects--------------
+-> Project 1
+# heading
+All In One Donation App
+# sub heading
+All-in-One Donation App streamlines donations using React Native, MongoDB, Node.js, and Express.js.
+
+-> Project 2
+# heading
+Furniture Ecommerce Store
+# sub heading
+ Furniture E-commerce Store, built with React Native, MongoDB, Node.js, and Express.js.
+
+-> Project 3
+# heading
+Text Utils
+# sub heading
+Responsive HTML/CSS layout for landing page for front-end developer. using React Js
+
+-> Project 4
+# heading
+Food Ordering App
+# sub heading
+Food Ordering App using React Native.
+--------Technologies--------------
+-> Lists of items
+Html
+CSS, Bootstrap &  Tailwind 
+JavaScript, TypeScript, Java, C++, Python.
+UI design in Figma
+Node Js
+React Native
+React Js
+Angular
+MongoDB
+SQL
+Express Js
+
+
+
+--------Additional technologies and skills--------------
+-> Lists of items
+Git
+Github
+Teamwork
+Quick learning
+Engagement
+VS Code
+Postman
+Juputer Notebook
+
+--------About me--------------
+2022
+Completed BCA - Bachelor of Computer Applications from Aryan College Ajmer.
+2024
+Completed MCA - Master of Computer Applications from PES University Bangalore.
+Started focusing on Frontend Development to build a developer's career.
