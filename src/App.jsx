@@ -5,8 +5,6 @@ import Project2 from './assets/Project22.png'
 import Project3 from './assets/Project333.png'
 import Project4 from './assets/Project33.png'
 import LinkedIn from './assets/linkedin.svg'
-import Facebook from './assets/facebook.svg'
-import Instagram from './assets/instagram.svg'
 import Github from './assets/github.svg'
 import ArrowDown from "./assets/arrow-down.svg";
 import { useEffect, useState } from "react";
@@ -38,17 +36,7 @@ function App() {
           <h1 className='font-bold text-xl'>Shivam Portfolio</h1>
         </div>
         <div>
-          {/* <ul className='flex gap-4'>
-            <li>
-              <a className='text-gray-400 hover:text-white cursor-pointer'> Projects</a>
-            </li>
-            <li>
-              <a className='text-gray-400 hover:text-white cursor-pointer'> Technologies</a>
-            </li>
-            <li>
-              <a className='text-gray-400 hover:text-white cursor-pointer'> About_me</a>
-            </li>
-          </ul> */}
+          
           <ul className="flex gap-4">
                 <li>
                   <a href="#projects" className="text-gray-400 hover:text-white cursor-pointer">
@@ -62,7 +50,7 @@ function App() {
                 </li>
                 <li>
                   <a href="#aboutme" className="text-gray-400 hover:text-white cursor-pointer">
-                    About me
+                    About
                   </a>
                 </li>
               </ul>
@@ -318,7 +306,7 @@ function App() {
      <footer className='md-8'>
         <div className="container m-auto flex justify-between px-12 py-6">
           <div>
-            <p className="text-gray-300 text-sm">Copyright @ 2023</p>
+            <p className="text-gray-300 text-sm">Copyright @2024</p>
           </div>
           <div>
             <ul className="flex gap-4">
