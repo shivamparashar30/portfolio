@@ -1,34 +1,654 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3b82f6, #06b6d4);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #2563eb, #0891b2);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Body styling */
 body {
-  background-color: #000;
-  color: #fff;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #000000;
+  color: #ffffff;
+  perspective: 1000px;
 }
- .gradiant-text{
+
+/* ===========================
+   3D TRANSFORM ANIMATIONS
+   =========================== */
+
+/* Perspective section for 3D effects */
+.perspective-section {
+  perspective: 2000px;
+  perspective-origin: center;
+}
+
+/* 3D Card Effect */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d:hover {
+  transform: translateY(-12px) rotateX(2deg) rotateY(-2deg);
+}
+
+/* 3D Tilt Effect on Hover */
+.hover-tilt {
+  transform-style: preserve-3d;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-tilt:hover {
+  transform: perspective(1000px) rotateX(-5deg) rotateY(5deg) translateZ(10px);
+}
+
+/* 3D Lift Effect */
+.hover-lift-3d {
+  transform-style: preserve-3d;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-lift-3d:hover {
+  transform: translateZ(20px) scale(1.05);
+}
+
+/* 3D Rotate Effect */
+.hover-rotate-3d {
+  transform-style: preserve-3d;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-rotate-3d:hover {
+  transform: rotateY(15deg) rotateX(5deg);
+}
+
+/* Profile 3D Effect */
+.profile-3d {
+  transform-style: preserve-3d;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.profile-3d:hover {
+  transform: scale(1.05) rotateY(5deg) rotateX(-3deg);
+}
+
+/* Lift effect for small elements */
+.hover-lift {
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+
+/* ===========================
+   SOFT FADE & SLIDE ANIMATIONS
+   =========================== */
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  opacity: 0;
+}
+
+/* Fade in right animation */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  opacity: 0;
+}
+
+/* Bounce in animation */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounceIn 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* ===========================
+   FLOATING ANIMATIONS
+   =========================== */
+
+/* Float animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.hover-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Slow float animation */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  66% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+}
+
+.hover-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+/* ===========================
+   PULSE & GLOW ANIMATIONS
+   =========================== */
+
+/* Slow pulse animation */
+@keyframes pulseSlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ===========================
+   GRADIENT ANIMATIONS
+   =========================== */
+
+/* Gradient animation for text */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+/* ===========================
+   ANIMATION DELAYS
+   =========================== */
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.animation-delay-800 {
+  animation-delay: 0.8s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-1200 {
+  animation-delay: 1.2s;
+}
+
+.animation-delay-1400 {
+  animation-delay: 1.4s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+/* ===========================
+   ADDITIONAL ANIMATIONS
+   =========================== */
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Glow effect */
+.glow {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+  transition: box-shadow 0.5s ease;
+}
+
+.glow:hover {
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.8);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+}
+
+/* Link underline animation */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background: linear-gradient(90deg, #3b82f6, #06b6d4);
+  transition: width 0.3s ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* Skeleton loading animation */
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #1f2937 0%, #374151 50%, #1f2937 100%);
+  background-size: 200px 100%;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(90deg, #3b82f6, #06b6d4, #3b82f6);
+  background-size: 200% auto;
   -webkit-background-clip: text;
-  @apply bg-gradient-to-t from-blue-500 to-cyan-500 text-transparent;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient 3s linear infinite;
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(6, 182, 212, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Button ripple effect */
+.ripple {
+  position: relative;
   overflow: hidden;
-  border-right: 0px solid #fff;
-    animation: typing-text steps(40) 8s infinite, blink ease 0.3s infinite;
-    text-wrap: nowrap;
-    display: inline-block;
-    width: max-content;
-    width: 0;
 }
 
-
-
-@keyframes typing-text {
-    from {
-        width: 0%;
-    } 
-    to {
-        width: 300px;
-    }
+.ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
 }
 
-@keyframes typing-text {
-    to {
-        border-color: transparent;
-    }
+.ripple:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
+/* Neon glow text */
+.neon-text {
+  text-shadow: 
+    0 0 7px #06b6d4,
+    0 0 10px #06b6d4,
+    0 0 21px #06b6d4,
+    0 0 42px #3b82f6,
+    0 0 82px #3b82f6,
+    0 0 92px #3b82f6,
+    0 0 102px #3b82f6,
+    0 0 151px #3b82f6;
+}
 
+/* Slide in animations */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Bounce animation */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce 2s infinite;
+}
+
+/* Progress bar animation */
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.animate-progress {
+  animation: progress 1.5s ease-out forwards;
+}
+
+/* Scale animation on hover */
+.hover-scale {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.08);
+}
+
+/* Soft shadow animation */
+.soft-shadow {
+  transition: box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.soft-shadow:hover {
+  box-shadow: 0 20px 60px rgba(6, 182, 212, 0.3);
+}
+
+/* Rotate on hover */
+@keyframes rotateHover {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hover-rotate {
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+}
+
+/* Swing animation */
+@keyframes swing {
+  20% {
+    transform: rotate(15deg);
+  }
+  40% {
+    transform: rotate(-10deg);
+  }
+  60% {
+    transform: rotate(5deg);
+  }
+  80% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-swing {
+  animation: swing 1s ease;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Reduce 3D effects on mobile for performance */
+  .card-3d:hover {
+    transform: translateY(-8px);
+  }
+  
+  .hover-tilt:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* Custom selection color */
+::selection {
+  background-color: rgba(6, 182, 212, 0.3);
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: rgba(6, 182, 212, 0.3);
+  color: #ffffff;
+}
+
+/* Focus visible styles for accessibility */
+*:focus-visible {
+  outline: 2px solid #06b6d4;
+  outline-offset: 2px;
+}
+
+/* Disable outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, textarea {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Prevent animation on page load */
+.no-animation {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Hamburger menu animations */
+.hamburger-line {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-origin: center;
+}
+
+/* Mobile menu slide animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-menu-enter {
+  animation: slideDown 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Overlay for mobile menu */
+.menu-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  transition: opacity 0.3s ease;
+}
+
+/* Mobile menu item stagger animation */
+.menu-item {
+  animation: slideDown 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  opacity: 0;
+}
+
+.menu-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.menu-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.menu-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.menu-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
