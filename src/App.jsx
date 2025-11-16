@@ -875,12 +875,16 @@
 // }
 
 // export default App;
+
 import "./App.css";
 import Profile from "./assets/Photo.png";
-import Project1 from "./assets/Project11.png";
-import Project2 from "./assets/Project22.png";
-import Project3 from "./assets/Project333.png";
-import Project4 from "./assets/Project33.png";
+import Project1 from "./assets/img1.png";
+import Project2 from "./assets/img2.png";
+import Project3 from "./assets/img3.png";
+import Project4 from "./assets/img4.png";
+import Project5 from "./assets/img5.png";
+import Project6 from "./assets/img6.png";
+import Project7 from "./assets/img7.png";
 import LinkedIn from "./assets/linkedin.svg";
 import Github from "./assets/github.svg";
 import ArrowDown from "./assets/arrow-down.svg";
@@ -1213,46 +1217,14 @@ function App() {
                 </div>
               </div>
 
-              {/* Project 3 - Text Utils App */}
-              <div className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up animation-delay-400">
-                <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project3}
-                    alt="Text Utils App"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-4 md:p-8">
-                  <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 group-hover:text-cyan-400 transition-colors duration-500">
-                    Text Utils App
-                  </h3>
-                  <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">
-                    Responsive HTML/CSS layout for landing page for front-end developer.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">HTML</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30 hover-lift transition-all duration-300">CSS</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">JavaScript</span>
-                  </div>
-                  <button
-                    onClick={() =>
-                      (window.location.href =
-                        "https://github.com/shivamparashar30/textutils")
-                    }
-                    className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
-                  >
-                    View Project →
-                  </button>
-                </div>
-              </div>
+             
 
               {/* Project 4 - Food Ordering App */}
               <div className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up animation-delay-600">
                 <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
                   <img
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project4}
+                    src={Project3}
                     alt="Food Ordering App"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
@@ -1286,7 +1258,7 @@ function App() {
                 <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
                   <img
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project1}
+                    src={Project4}
                     alt="AI Skill Scan"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
@@ -1306,7 +1278,7 @@ function App() {
                   <button
                     onClick={() =>
                       (window.location.href =
-                        "https://github.com/shivamparashar30/ai-skill-scan")
+                        "https://github.com/shivamparashar30/ai-skill-scan-main")
                     }
                     className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
                   >
@@ -1320,7 +1292,7 @@ function App() {
                 <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
                   <img
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project2}
+                    src={Project5}
                     alt="Movie Ticket Booking App"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
@@ -1340,7 +1312,7 @@ function App() {
                   <button
                     onClick={() =>
                       (window.location.href =
-                        "https://github.com/shivamparashar30/movie-ticket-booking")
+                        "https://github.com/shivamparashar30/Movie-Ticket-Booking-App")
                     }
                     className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
                   >
@@ -1354,7 +1326,7 @@ function App() {
                 <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
                   <img
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project3}
+                    src={Project6}
                     alt="Admin DB"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
@@ -1374,7 +1346,7 @@ function App() {
                   <button
                     onClick={() =>
                       (window.location.href =
-                        "https://github.com/shivamparashar30/admin-db")
+                        "https://github.com/shivamparashar30/Admin-Dashboard")
                     }
                     className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
                   >
@@ -1388,7 +1360,7 @@ function App() {
                 <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
                   <img
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project4}
+                    src={Project7}
                     alt="Body Fat Calculator App"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
@@ -1408,7 +1380,7 @@ function App() {
                   <button
                     onClick={() =>
                       (window.location.href =
-                        "https://github.com/shivamparashar30/body-fat-calculator")
+                        "https://github.com/shivamparashar30/Body-Fat-Calculator")
                     }
                     className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
                   >
