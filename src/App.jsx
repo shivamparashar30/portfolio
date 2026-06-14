@@ -901,7 +901,15 @@ function App() {
   const [activeTab, setActiveTab] = useState("mobile");
   const [formStatus, setFormStatus] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const projectRefs = useRef([]);
+  const statsRef = useRef(null);
+  const [statsVisible, setStatsVisible] = useState(false);
+  const [counters, setCounters] = useState({ apps: 0, projects: 0, experience: 0, companies: 0 });
+
+  const roles = ["React Native Developer", "Software Engineer", "Full Stack Developer", "UI/UX Designer"];
 
   const onPageScroll = () => {
     if (window.pageYOffset > 200) {
@@ -935,6 +943,56 @@ function App() {
     });
     return () => observer.disconnect();
   }, []);
+
+  // Typing effect
+  useEffect(() => {
+    const currentRole = roles[roleIndex];
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        setDisplayText(currentRole.substring(0, displayText.length + 1));
+        if (displayText.length === currentRole.length) {
+          setTimeout(() => setIsDeleting(true), 1500);
+        }
+      } else {
+        setDisplayText(currentRole.substring(0, displayText.length - 1));
+        if (displayText.length === 0) {
+          setIsDeleting(false);
+          setRoleIndex((prev) => (prev + 1) % roles.length);
+        }
+      }
+    }, isDeleting ? 40 : 80);
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, roleIndex]);
+
+  // Stats counter animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !statsVisible) {
+          setStatsVisible(true);
+          const targets = { apps: 10, projects: 20, experience: 2, companies: 2 };
+          const duration = 2000;
+          const steps = 60;
+          let step = 0;
+          const interval = setInterval(() => {
+            step++;
+            const progress = step / steps;
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCounters({
+              apps: Math.round(targets.apps * eased),
+              projects: Math.round(targets.projects * eased),
+              experience: Math.round(targets.experience * eased),
+              companies: Math.round(targets.companies * eased),
+            });
+            if (step >= steps) clearInterval(interval);
+          }, duration / steps);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (statsRef.current) observer.observe(statsRef.current);
+    return () => observer.disconnect();
+  }, [statsVisible]);
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
@@ -1035,12 +1093,12 @@ function App() {
       <main className="pt-20">
         {/* Intro/banner section */}
         <section id="home" className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-b from-black via-gray-900 to-black">
-          {/* Animated background elements */}
+          {/* Animated Background */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute inset-0 dot-grid opacity-40"></div>
+            <div className="absolute inset-0 dot-grid opacity-30"></div>
             <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-slow animation-delay-1000"></div>
-            <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow animation-delay-2000"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-3xl"></div>
           </div>
           
           <div className="container m-auto px-6 py-20 relative z-10">
@@ -1093,8 +1151,9 @@ function App() {
                 </div>
 
                 {/* Common content for both mobile and desktop */}
-                <h2 className="font-bold text-2xl md:text-4xl text-gray-300 animate-fade-in-up animation-delay-400 cursor-blink">
-                  React Native Developer
+                <h2 className="font-bold text-2xl md:text-4xl text-gray-300 animate-fade-in-up animation-delay-400 h-10 md:h-14">
+                  <span>{displayText}</span>
+                  <span className="text-cyan-400 animate-pulse">|</span>
                 </h2>
                 <p className="text-base md:text-lg text-gray-400 leading-relaxed max-w-2xl animate-fade-in-up animation-delay-600">
                   I am a skilled React Native Developer specializing in creating
@@ -1165,6 +1224,101 @@ function App() {
             </div>
           </div>
         </section>
+        {/* Stats Section */}
+        <section ref={statsRef} className="py-16 bg-gradient-to-b from-black to-gray-900 relative overflow-hidden">
+          <div className="absolute inset-0 dot-grid opacity-10"></div>
+          <div className="container m-auto px-6 relative z-10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {[
+                { value: counters.apps, suffix: "+", label: "Apps Built", color: "from-blue-500 to-cyan-500" },
+                { value: counters.projects, suffix: "+", label: "Projects", color: "from-cyan-500 to-blue-500" },
+                { value: counters.experience, suffix: "+", label: "Years Experience", color: "from-blue-500 to-purple-500" },
+                { value: counters.companies, suffix: "", label: "Companies", color: "from-purple-500 to-cyan-500" },
+              ].map((stat, i) => (
+                <div key={i} className="text-center group">
+                  <div className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2 transition-transform duration-500 group-hover:scale-110`}>
+                    {stat.value}{stat.suffix}
+                  </div>
+                  <p className="text-gray-400 text-sm md:text-base font-medium">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* What I Bring */}
+        <section className="py-16 md:py-20 bg-gray-900 relative">
+          <div className="absolute inset-0 dot-grid opacity-10"></div>
+          <div className="container m-auto px-6 relative z-10">
+            <div className="text-center mb-12">
+              <p className="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">Why Hire Me</p>
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                What I Bring to the Table
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {/* Mobile Development */}
+              <div className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 md:p-8 hover:border-blue-500/50 transition-all duration-500 hover:shadow-lg hover:shadow-blue-500/10 group animate-fade-in-up">
+                <div className="flex justify-center mb-6" style={{ perspective: "800px" }}>
+                  <div className="phone-3d">
+                    <div className="phone-notif">3</div>
+                    <div className="phone-lines" style={{ position: "absolute", top: "14px", left: "10px", right: "10px", zIndex: 1 }}>
+                      <span></span><span></span><span></span><span></span>
+                    </div>
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-3 text-center">Mobile Development</h3>
+                <p className="text-gray-400 text-sm leading-relaxed text-center">Cross-platform apps with React Native deployed on Play Store & App Store with push notifications and real-time features.</p>
+              </div>
+
+              {/* Web Development */}
+              <div className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 md:p-8 hover:border-cyan-500/50 transition-all duration-500 hover:shadow-lg hover:shadow-cyan-500/10 group animate-fade-in-up animation-delay-200">
+                <div className="flex justify-center mb-6" style={{ perspective: "800px" }}>
+                  <div className="laptop-3d">
+                    <div className="laptop-screen">
+                      <div className="code-lines" style={{ position: "absolute", top: "10px", left: "10px", right: "10px", zIndex: 1 }}>
+                        <span></span><span></span><span></span><span></span><span></span>
+                      </div>
+                      <div className="code-cursor"></div>
+                    </div>
+                    <div className="laptop-base"></div>
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-3 text-center">Web Development</h3>
+                <p className="text-gray-400 text-sm leading-relaxed text-center">Responsive web apps and CRM dashboards built with React.js, converting Figma designs into pixel-perfect interfaces.</p>
+              </div>
+
+              {/* Full Stack & Deployment */}
+              <div className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 md:p-8 hover:border-purple-500/50 transition-all duration-500 hover:shadow-lg hover:shadow-purple-500/10 group animate-fade-in-up animation-delay-400">
+                <div className="flex justify-center mb-6" style={{ perspective: "800px" }}>
+                  <div className="server-3d relative">
+                    <div className="server-unit">
+                      <div className="server-led green"></div>
+                      <div className="server-led blue"></div>
+                      <div className="server-slots"><span></span><span></span><span></span><span></span><span></span></div>
+                    </div>
+                    <div className="server-unit">
+                      <div className="server-led green"></div>
+                      <div className="server-led amber"></div>
+                      <div className="server-slots"><span></span><span></span><span></span><span></span><span></span></div>
+                    </div>
+                    <div className="server-unit">
+                      <div className="server-led blue"></div>
+                      <div className="server-led green"></div>
+                      <div className="server-slots"><span></span><span></span><span></span><span></span><span></span></div>
+                    </div>
+                    <div className="data-flow"></div>
+                    <div className="data-flow"></div>
+                    <div className="data-flow"></div>
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-3 text-center">Full Stack & Deployment</h3>
+                <p className="text-gray-400 text-sm leading-relaxed text-center">End-to-end development with Node.js, MongoDB, Firebase, and Supabase. Managing full lifecycle from dev to production.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Section divider */}
         <div className="section-divider"></div>
 
@@ -1449,7 +1603,7 @@ function App() {
                           <ul className="space-y-2 text-gray-300">
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
-                              <span>Built 5+ web and mobile apps from scratch, including a complete CRM system using React.js and React Native</span>
+                              <span>Built 10+ web and mobile apps from scratch, including a complete CRM system using React.js and React Native</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
