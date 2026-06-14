@@ -899,6 +899,7 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [visibleCards, setVisibleCards] = useState(new Set());
   const [activeTab, setActiveTab] = useState("mobile");
+  const [formStatus, setFormStatus] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
   const projectRefs = useRef([]);
 
@@ -981,6 +982,7 @@ function App() {
                   { href: "#projects", label: "Projects" },
                   { href: "#technologies", label: "Skills" },
                   { href: "#aboutme", label: "About" },
+                  { href: "#contact", label: "Contact" },
                 ].map((item) => (
                   <li key={item.href}>
                     <a
@@ -1473,6 +1475,139 @@ function App() {
           </section>
         </section>
       </main>
+
+      {/* Contact Section */}
+      <section className="py-20 bg-gradient-to-b from-black to-gray-900 relative" id="contact">
+        <div className="absolute inset-0 dot-grid opacity-15"></div>
+        <div className="container m-auto px-6 relative z-10">
+          <div className="text-center mb-12">
+            <p className="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">Get In Touch</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              Let's Work Together
+            </h2>
+            <p className="text-gray-400 max-w-lg mx-auto">
+              Have a project in mind or want to discuss an opportunity? Fill out the form and I'll get back to you soon.
+            </p>
+          </div>
+          <div className="max-w-2xl mx-auto">
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setFormStatus("sending");
+                const formData = new FormData(e.target);
+                formData.append("access_key", import.meta.env.VITE_WEB3FORMS_KEY);
+                formData.append("from_name", "Portfolio Contact Form");
+                formData.append("subject", formData.get("subject") || "New Enquiry from Portfolio");
+                try {
+                  const res = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    body: formData,
+                  });
+                  const data = await res.json();
+                  if (data.success) {
+                    setFormStatus("success");
+                    e.target.reset();
+                    setTimeout(() => setFormStatus(""), 4000);
+                  } else {
+                    setFormStatus("error");
+                    setTimeout(() => setFormStatus(""), 4000);
+                  }
+                } catch {
+                  setFormStatus("error");
+                  setTimeout(() => setFormStatus(""), 4000);
+                }
+              }}
+              className="bg-gray-900/60 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 md:p-10 space-y-5 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    placeholder="Your name"
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 transition-all duration-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="your@email.com"
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 transition-all duration-300"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Subject</label>
+                <input
+                  type="text"
+                  name="subject"
+                  required
+                  placeholder="What's this about?"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 transition-all duration-300"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Message</label>
+                <textarea
+                  name="message"
+                  required
+                  rows={5}
+                  placeholder="Tell me about your project or opportunity..."
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 transition-all duration-300 resize-none"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                disabled={formStatus === "sending"}
+                className={`w-full py-4 px-6 rounded-xl font-semibold text-white shadow-lg transition-all duration-500 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3 ${
+                  formStatus === "success"
+                    ? "bg-emerald-600 shadow-emerald-500/30"
+                    : formStatus === "error"
+                    ? "bg-red-600 shadow-red-500/30"
+                    : "bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40"
+                } ${formStatus === "sending" ? "opacity-70 cursor-not-allowed" : ""}`}
+              >
+                {formStatus === "sending" ? (
+                  <>
+                    <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : formStatus === "success" ? (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Message Sent!
+                  </>
+                ) : formStatus === "error" ? (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Failed. Try again.
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    Send Message
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
       <footer className="bg-black relative">
         <div className="section-divider"></div>
         <div className="container m-auto px-6 py-12">
