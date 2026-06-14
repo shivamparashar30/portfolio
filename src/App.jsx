@@ -878,21 +878,27 @@
 
 import "./App.css";
 import Profile from "./assets/Photo.png";
-import Project1 from "./assets/img1.png";
-import Project2 from "./assets/img2.png";
-import Project3 from "./assets/img3.png";
-import Project4 from "./assets/img4.png";
-import Project5 from "./assets/img5.png";
-import Project6 from "./assets/img6.png";
-import Project7 from "./assets/img7.png";
+import Project1 from "./assets/images/all-in-one-donation.png";
+import Project2 from "./assets/images/furniture.png";
+import Project3 from "./assets/images/food delivery.png";
+import Project4 from "./assets/images/ai-skill-scan.png";
+import Project5 from "./assets/images/movie ticket booking.png";
+import Project6 from "./assets/images/AdminDB.png";
+import Project7 from "./assets/images/body-fat-calc.png";
+import Project8 from "./assets/images/candence.png";
+import Project9 from "./assets/images/expendly.png";
+import Project10 from "./assets/images/pulse care.png";
 import LinkedIn from "./assets/linkedin.svg";
 import Github from "./assets/github.svg";
 import ArrowDown from "./assets/arrow-down.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 function App() {
   const [scrolling, setScrolling] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [visibleCards, setVisibleCards] = useState(new Set());
+  const [activeTab, setActiveTab] = useState("mobile");
+  const projectRefs = useRef([]);
 
   const onPageScroll = () => {
     if (window.pageYOffset > 200) {
@@ -909,56 +915,57 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = Number(entry.target.dataset.index);
+            setVisibleCards((prev) => new Set([...prev, index]));
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
+    );
+    projectRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
   };
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-lg border-b border-gray-800/50">
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolling ? 'bg-gray-900/90 backdrop-blur-xl border-b border-gray-800/50 shadow-lg shadow-black/20' : 'bg-transparent'}`}>
         <div className="container m-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="font-bold text-2xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                Shivam Parashar
+                SP<span className="text-cyan-400">.</span>
               </h1>
             </div>
             
             {/* Desktop Navigation */}
             <div className="hidden md:block">
               <ul className="flex gap-8">
-                <li>
-                  <a
-                    href="#home"
-                    className="text-gray-300 hover:text-cyan-400 cursor-pointer transition-colors duration-300 font-medium"
-                  >
-                    Home
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#projects"
-                    className="text-gray-300 hover:text-cyan-400 cursor-pointer transition-colors duration-300 font-medium"
-                  >
-                    Projects
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#technologies"
-                    className="text-gray-300 hover:text-cyan-400 cursor-pointer transition-colors duration-300 font-medium"
-                  >
-                    Skills
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#aboutme"
-                    className="text-gray-300 hover:text-cyan-400 cursor-pointer transition-colors duration-300 font-medium"
-                  >
-                    About
-                  </a>
-                </li>
+                {[
+                  { href: "#home", label: "Home" },
+                  { href: "#projects", label: "Projects" },
+                  { href: "#technologies", label: "Skills" },
+                  { href: "#aboutme", label: "About" },
+                ].map((item) => (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      className="text-gray-300 hover:text-cyan-400 cursor-pointer transition-colors duration-300 font-medium link-underline"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -1022,6 +1029,7 @@ function App() {
         <section id="home" className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-b from-black via-gray-900 to-black">
           {/* Animated background elements */}
           <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 dot-grid opacity-40"></div>
             <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-slow animation-delay-1000"></div>
             <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow animation-delay-2000"></div>
@@ -1077,7 +1085,7 @@ function App() {
                 </div>
 
                 {/* Common content for both mobile and desktop */}
-                <h2 className="font-bold text-2xl md:text-4xl text-gray-300 animate-fade-in-up animation-delay-400">
+                <h2 className="font-bold text-2xl md:text-4xl text-gray-300 animate-fade-in-up animation-delay-400 cursor-blink">
                   React Native Developer
                 </h2>
                 <p className="text-base md:text-lg text-gray-400 leading-relaxed max-w-2xl animate-fade-in-up animation-delay-600">
@@ -1085,6 +1093,12 @@ function App() {
                   efficient, user-friendly mobile applications with a focus on
                   community engagement and cutting-edge technology.
                 </p>
+                <div className="animate-fade-in-up animation-delay-600">
+                  <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-sm text-emerald-400 font-medium">
+                    <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                    Available for opportunities
+                  </span>
+                </div>
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 animate-fade-in-up animation-delay-800">
                   <a
                     href="#projects"
@@ -1127,9 +1141,9 @@ function App() {
               <div className="relative flex-shrink-0 hidden md:block animate-fade-in-right animation-delay-400">
                 <div className="relative hover-float-slow">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur-2xl opacity-30 animate-pulse-slow"></div>
-                  <div className="profile-3d">
+                  <div className="profile-3d profile-ring">
                     <img
-                      className="relative rounded-full border-4 border-cyan-500/30 w-80 h-80 md:w-96 md:h-96 object-cover shadow-2xl shadow-cyan-500/20 transition-all duration-700 hover:border-cyan-400/50 hover:shadow-cyan-400/40"
+                      className="relative rounded-full w-80 h-80 md:w-96 md:h-96 object-cover shadow-2xl shadow-cyan-500/20 transition-all duration-700 hover:shadow-cyan-400/40"
                       src={Profile}
                       alt="Shivam Parashar"
                     />
@@ -1139,356 +1153,186 @@ function App() {
             </div>
           </div>
         </section>
+        {/* Section divider */}
+        <div className="section-divider"></div>
+
         {/* projects */}
-        <section id="projects" className="py-12 md:py-20 bg-black perspective-section">
-          <div className="container m-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent animate-fade-in-up">
+        <section id="projects" className="py-12 md:py-20 bg-black perspective-section relative">
+          <div className="absolute inset-0 dot-grid opacity-20"></div>
+          <div className="container m-auto px-4 relative z-10">
+            <p className="text-center text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3 animate-fade-in-up">Portfolio</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 md:mb-10 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent animate-fade-in-up">
               Featured Projects
             </h2>
-            
+
+            {/* Tabs */}
+            <div className="flex justify-center mb-8 md:mb-12">
+              <div className="inline-flex bg-gray-900/80 backdrop-blur-sm rounded-xl p-1.5 border border-gray-800">
+                <button
+                  onClick={() => setActiveTab("mobile")}
+                  className={`px-5 md:px-8 py-2.5 md:py-3 rounded-lg text-sm md:text-base font-semibold transition-all duration-500 ${
+                    activeTab === "mobile"
+                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-cyan-500/30"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  Mobile Apps
+                </button>
+                <button
+                  onClick={() => setActiveTab("web")}
+                  className={`px-5 md:px-8 py-2.5 md:py-3 rounded-lg text-sm md:text-base font-semibold transition-all duration-500 ${
+                    activeTab === "web"
+                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-cyan-500/30"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  Web Apps
+                </button>
+              </div>
+            </div>
+
             {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-10 max-w-7xl mx-auto">
-              
-              {/* Project 1 - All In One Donation App */}
-              <div className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up">
-                <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project1}
-                    alt="All In One Donation App"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-4 md:p-8">
-                  <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 group-hover:text-cyan-400 transition-colors duration-500">
-                    All In One Donation App
-                  </h3>
-                  <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">
-                    Streamlines donations using React Native, MongoDB, Node.js and Express.js.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">React Native</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30 hover-lift transition-all duration-300">MongoDB</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">Node.js</span>
-                  </div>
-                  <button
-                    onClick={() =>
-                      (window.location.href =
-                        "https://github.com/shivamparashar30/AIOD-FrontEnd")
-                    }
-                    className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
-                  >
-                    View Project →
-                  </button>
-                </div>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
 
-              {/* Project 2 - Furniture Ecommerce */}
-              <div className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up animation-delay-200">
-                <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project2}
-                    alt="Furniture Ecommerce"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-4 md:p-8">
-                  <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 group-hover:text-cyan-400 transition-colors duration-500">
-                    Furniture Ecommerce
-                  </h3>
-                  <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">
-                    Furniture E-commerce Store, built with React Native, MongoDB, Node.js and Express.js.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">React Native</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30 hover-lift transition-all duration-300">MongoDB</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">Express.js</span>
+              {[
+                { img: Project1, title: "All In One Donation App", desc: "Streamlines donations using React Native, MongoDB, Node.js and Express.js.", tags: ["React Native", "MongoDB", "Node.js"], link: "https://github.com/shivamparashar30/AIOD-FrontEnd", type: "mobile" },
+                { img: Project2, title: "Furniture Ecommerce", desc: "Furniture E-commerce Store, built with React Native, MongoDB, Node.js and Express.js.", tags: ["React Native", "MongoDB", "Express.js"], link: "https://github.com/shivamparashar30/FurnitureApp-FrontEnd", type: "mobile" },
+                { img: Project3, title: "Food Ordering App", desc: "Food Ordering App using React Native and MongoDB.", tags: ["React Native", "MongoDB", "Node.js"], link: "https://github.com/shivamparashar30/Food-order-app", type: "mobile" },
+                { img: Project5, title: "Movie Ticket Booking", desc: "Complete movie ticket booking solution with React Native, MongoDB, Node.js and Express.js.", tags: ["React Native", "MongoDB", "Express.js"], link: "https://github.com/shivamparashar30/Movie-Ticket-Booking-App", type: "mobile" },
+                { img: Project7, title: "Body Fat Calculator", desc: "AI-powered body fat percentage calculator using React Native and TensorFlow.", tags: ["React Native", "TensorFlow", "AI/ML"], link: "https://github.com/shivamparashar30/Body-Fat-Calculator", type: "mobile" },
+                { img: Project10, title: "Pulse Care", desc: "Healthcare monitoring platform for real-time patient vitals tracking.", tags: ["React Native", "Node.js", "MongoDB"], link: "https://github.com/shivamparashar30/PulseCare", type: "mobile" },
+                { img: Project4, title: "AI Skill Scan", desc: "AI-powered skill assessment platform with ATS scoring and resume analysis.", tags: ["React.js", "AI", "Node.js"], link: "https://ai-skill-scan-main.vercel.app/", type: "web" },
+                { img: Project6, title: "Admin Dashboard", desc: "Comprehensive admin dashboard for database management built with React.js.", tags: ["React.js", "Dashboard", "Database"], link: "https://admindbshivam.vercel.app", type: "web" },
+                { img: Project8, title: "Cadence", desc: "A modern coding practice and DSA preparation platform.", tags: ["React.js", "Node.js", "MongoDB"], link: "https://cadence-prep.vercel.app/", type: "web" },
+                { img: Project9, title: "Spendly", desc: "Smart expense tracking and budget management dashboard.", tags: ["React.js", "Firebase", "Analytics"], link: "https://github.com/shivamparashar30/spendly", type: "web" },
+              ]
+                .filter((project) => project.type === activeTab)
+                .map((project, i) => (
+                <div
+                  key={project.title}
+                  ref={(el) => (projectRefs.current[i] = el)}
+                  data-index={i}
+                  className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up"
+                  style={{
+                    animationDelay: `${i * 0.1}s`,
+                  }}
+                >
+                  <div className="relative overflow-hidden aspect-video bg-gray-800">
+                    <img
+                      className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-1000 ease-out"
+                      src={project.img}
+                      alt={project.title}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/20 to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-700"></div>
+                    <div className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-black/40 text-white rounded-full backdrop-blur-md border border-white/10">
+                      {project.type === "mobile" ? "Mobile" : "Web"}
+                    </div>
                   </div>
-                  <button
-                    onClick={() =>
-                      (window.location.href =
-                        "https://github.com/shivamparashar30/FurnitureApp-FrontEnd")
-                    }
-                    className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
-                  >
-                    View Project →
-                  </button>
-                </div>
-              </div>
-
-             
-
-              {/* Project 4 - Food Ordering App */}
-              <div className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up animation-delay-600">
-                <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project3}
-                    alt="Food Ordering App"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-4 md:p-8">
-                  <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 group-hover:text-cyan-400 transition-colors duration-500">
-                    Food Ordering App
-                  </h3>
-                  <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">
-                    Food Ordering App using React Native and MongoDB.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">React Native</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30 hover-lift transition-all duration-300">MongoDB</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">Node.js</span>
+                  <div className="p-4 md:p-6">
+                    <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 group-hover:text-cyan-400 transition-colors duration-500">
+                      {project.title}
+                    </h3>
+                    <p className="text-gray-400 text-sm mb-4 leading-relaxed line-clamp-2">
+                      {project.desc}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-5">
+                      {project.tags.map((tag, j) => (
+                        <span
+                          key={j}
+                          className={`px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold rounded-full border hover-lift transition-all duration-300 ${
+                            j % 2 === 0
+                              ? "bg-blue-500/20 text-blue-400 border-blue-500/30"
+                              : "bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
+                          }`}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => (window.location.href = project.link)}
+                      className="w-full py-2.5 md:py-3 px-4 md:px-6 rounded-lg md:rounded-xl text-sm bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
+                    >
+                      View Project →
+                    </button>
                   </div>
-                  <button
-                    onClick={() =>
-                      (window.location.href =
-                        "https://github.com/shivamparashar30/Food-order-app")
-                    }
-                    className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
-                  >
-                    View Project →
-                  </button>
                 </div>
-              </div>
-
-              {/* Project 5 - AI Skill Scan */}
-              <div className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up animation-delay-800">
-                <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project4}
-                    alt="AI Skill Scan"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-4 md:p-8">
-                  <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 group-hover:text-cyan-400 transition-colors duration-500">
-                    AI Skill Scan
-                  </h3>
-                  <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">
-                    AI-powered skill assessment platform built with React Native, MongoDB, Node.js and Express.js.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">React Native</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30 hover-lift transition-all duration-300">AI</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">MongoDB</span>
-                  </div>
-                  <button
-                    onClick={() =>
-                      (window.location.href =
-                        "https://github.com/shivamparashar30/ai-skill-scan-main")
-                    }
-                    className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
-                  >
-                    View Project →
-                  </button>
-                </div>
-              </div>
-
-              {/* Project 6 - Movie Ticket Booking App */}
-              <div className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up animation-delay-1000">
-                <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project5}
-                    alt="Movie Ticket Booking App"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-4 md:p-8">
-                  <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 group-hover:text-cyan-400 transition-colors duration-500">
-                    Movie Ticket Booking App
-                  </h3>
-                  <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">
-                    Complete movie ticket booking solution with React Native, MongoDB, Node.js and Express.js.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">React Native</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30 hover-lift transition-all duration-300">MongoDB</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">Express.js</span>
-                  </div>
-                  <button
-                    onClick={() =>
-                      (window.location.href =
-                        "https://github.com/shivamparashar30/Movie-Ticket-Booking-App")
-                    }
-                    className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
-                  >
-                    View Project →
-                  </button>
-                </div>
-              </div>
-
-              {/* Project 7 - Admin DB */}
-              <div className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up animation-delay-1200">
-                <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project6}
-                    alt="Admin DB"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-4 md:p-8">
-                  <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 group-hover:text-cyan-400 transition-colors duration-500">
-                    Admin DB
-                  </h3>
-                  <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">
-                    Comprehensive admin dashboard for database management built with React.js.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">React.js</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30 hover-lift transition-all duration-300">Dashboard</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">Database</span>
-                  </div>
-                  <button
-                    onClick={() =>
-                      (window.location.href =
-                        "https://github.com/shivamparashar30/Admin-Dashboard")
-                    }
-                    className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
-                  >
-                    View Project →
-                  </button>
-                </div>
-              </div>
-
-              {/* Project 8 - Body Fat Calculator App */}
-              <div className="group relative bg-gray-900/50 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-gray-800 hover:border-cyan-500/50 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/20 card-3d animate-fade-in-up animation-delay-1400">
-                <div className="relative overflow-hidden h-48 md:h-72 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    src={Project7}
-                    alt="Body Fat Calculator App"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
-                </div>
-                <div className="p-4 md:p-8">
-                  <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 group-hover:text-cyan-400 transition-colors duration-500">
-                    Body Fat Calculator App
-                  </h3>
-                  <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">
-                    AI-powered body fat percentage calculator using React Native and TensorFlow for accurate predictions.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">React Native</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30 hover-lift transition-all duration-300">TensorFlow</span>
-                    <span className="px-2 md:px-3 py-0.5 md:py-1 text-xs font-semibold bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 hover-lift transition-all duration-300">AI/ML</span>
-                  </div>
-                  <button
-                    onClick={() =>
-                      (window.location.href =
-                        "https://github.com/shivamparashar30/Body-Fat-Calculator")
-                    }
-                    className="w-full py-2.5 md:py-3.5 px-4 md:px-6 rounded-lg md:rounded-xl text-sm md:text-base bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 transition-all duration-500 font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105 active:scale-95 hover-tilt"
-                  >
-                    View Project →
-                  </button>
-                </div>
-              </div>
+              ))}
 
             </div>
           </div>
 
+          {/* Section divider */}
+          <div className="section-divider"></div>
+
           {/* Technologies */}
-          <section className="py-20 bg-gradient-to-b from-black via-gray-900 to-black" id="technologies">
-            <div className="container m-auto px-6">
+          <section className="py-20 bg-gradient-to-b from-black via-gray-900 to-black relative" id="technologies">
+            <div className="absolute inset-0 dot-grid opacity-15"></div>
+            <div className="container m-auto px-6 relative z-10">
               <div className="text-center mb-16">
+                <p className="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">What I Know</p>
                 <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
                   Skills & Technologies
                 </h2>
                 <p className="text-gray-400 text-lg">Technologies I work with</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-                
-                {/* Skill Card 1 - HTML */}
-                <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">HTML</h3>
-                    <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm font-semibold border border-cyan-500/30">Advanced</span>
+              <div className="max-w-5xl mx-auto space-y-6">
+
+                {/* Row 1: Languages + Dev Tools */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Languages */}
+                  <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 md:p-8 hover:border-blue-500/50 transition-all duration-500 hover:shadow-lg hover:shadow-blue-500/10 animate-fade-in-up">
+                    <h3 className="text-lg font-bold text-white mb-5 flex items-center gap-3">
+                      <span className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 text-sm">&lt;/&gt;</span>
+                      Languages
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {["JavaScript", "TypeScript", "Java", "Python", "C++"].map((skill, i) => (
+                        <span
+                          key={i}
+                          className="px-4 py-2 text-sm font-medium bg-blue-500/10 text-blue-300 rounded-full border border-blue-500/20 hover:border-blue-400/50 hover:bg-blue-500/20 hover:-translate-y-0.5 transition-all duration-300 cursor-default"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transform transition-transform duration-1000 ease-out" style={{width: '100%'}}></div>
+
+                  {/* Developer Tools */}
+                  <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 md:p-8 hover:border-purple-500/50 transition-all duration-500 hover:shadow-lg hover:shadow-purple-500/10 animate-fade-in-up animation-delay-200">
+                    <h3 className="text-lg font-bold text-white mb-5 flex items-center gap-3">
+                      <span className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 text-sm">#</span>
+                      Developer Tools
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {["Git", "GitHub", "VS Code", "Postman", "Figma", "Android Studio"].map((skill, i) => (
+                        <span
+                          key={i}
+                          className="px-4 py-2 text-sm font-medium bg-purple-500/10 text-purple-300 rounded-full border border-purple-500/20 hover:border-purple-400/50 hover:bg-purple-500/20 hover:-translate-y-0.5 transition-all duration-300 cursor-default"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                {/* Skill Card 2 - CSS */}
-                <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">CSS, Bootstrap & Tailwind</h3>
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm font-semibold border border-blue-500/30">Proficient</span>
-                  </div>
-                  <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transform transition-transform duration-1000 ease-out" style={{width: '95%'}}></div>
-                  </div>
-                </div>
-
-                {/* Skill Card 3 - Programming Languages */}
-                <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">JavaScript, Java, C++, Python</h3>
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm font-semibold border border-blue-500/30">Proficient</span>
-                  </div>
-                  <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transform transition-transform duration-1000 ease-out" style={{width: '95%'}}></div>
-                  </div>
-                </div>
-
-                {/* Skill Card 4 - UI Design */}
-                <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">UI Design in Figma</h3>
-                    <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm font-semibold border border-cyan-500/30">Advanced</span>
-                  </div>
-                  <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transform transition-transform duration-1000 ease-out" style={{width: '100%'}}></div>
-                  </div>
-                </div>
-
-                {/* Skill Card 5 - React Native */}
-                <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">React Native</h3>
-                    <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm font-semibold border border-cyan-500/30">Advanced</span>
-                  </div>
-                  <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transform transition-transform duration-1000 ease-out" style={{width: '100%'}}></div>
-                  </div>
-                </div>
-
-                {/* Skill Card 6 - React Js */}
-                <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">React.js</h3>
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm font-semibold border border-blue-500/30">Proficient</span>
-                  </div>
-                  <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transform transition-transform duration-1000 ease-out" style={{width: '90%'}}></div>
-                  </div>
-                </div>
-
-                {/* Skill Card 7 - MongoDB */}
-                <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">MongoDB</h3>
-                    <span className="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm font-semibold border border-purple-500/30">Intermediate</span>
-                  </div>
-                  <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transform transition-transform duration-1000 ease-out" style={{width: '75%'}}></div>
-                  </div>
-                </div>
-
-                {/* Skill Card 8 - Express Js */}
-                <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Express.js</h3>
-                    <span className="px-3 py-1 bg-gray-500/20 text-gray-400 rounded-full text-sm font-semibold border border-gray-500/30">Beginner</span>
-                  </div>
-                  <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transform transition-transform duration-1000 ease-out" style={{width: '50%'}}></div>
+                {/* Row 2: Frameworks - full width */}
+                <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 md:p-8 hover:border-cyan-500/50 transition-all duration-500 hover:shadow-lg hover:shadow-cyan-500/10 animate-fade-in-up animation-delay-400">
+                  <h3 className="text-lg font-bold text-white mb-5 flex items-center gap-3">
+                    <span className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-sm">{ }</span>
+                    Frameworks & Technologies
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {["React Native", "React.js", "Node.js", "Express.js", "MongoDB", "Supabase", "Firebase", "Redux Toolkit", "Tailwind CSS", "Bootstrap", "REST APIs", "SQL"].map((skill, i) => (
+                      <span
+                        key={i}
+                        className="px-4 py-2 text-sm font-medium bg-cyan-500/10 text-cyan-300 rounded-full border border-cyan-500/20 hover:border-cyan-400/50 hover:bg-cyan-500/20 hover:-translate-y-0.5 transition-all duration-300 cursor-default"
+                      >
+                        {skill}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
@@ -1496,70 +1340,18 @@ function App() {
             </div>
           </section>
 
-          {/* Additional skills section */}
-          <section className="py-20 bg-black">
-            <div className="container m-auto px-6">
-              <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                  Additional Skills & Tools
-                </h2>
-                <p className="text-gray-400 text-lg">Tools and technologies I use daily</p>
-              </div>
-              
-              <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
-                <div className="group px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <p className="font-semibold text-white group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></span>
-                    Git
-                  </p>
-                </div>
-                <div className="group px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <p className="font-semibold text-white group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></span>
-                    Github
-                  </p>
-                </div>
-                <div className="group px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <p className="font-semibold text-white group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></span>
-                    VS Code
-                  </p>
-                </div>
-                <div className="group px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <p className="font-semibold text-white group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></span>
-                    Postman
-                  </p>
-                </div>
-                <div className="group px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <p className="font-semibold text-white group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></span>
-                    Teamwork
-                  </p>
-                </div>
-                <div className="group px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <p className="font-semibold text-white group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></span>
-                    Quick Learning
-                  </p>
-                </div>
-                <div className="group px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-                  <p className="font-semibold text-white group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                    <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></span>
-                    Engagement
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
+          {/* Section divider */}
+          <div className="section-divider"></div>
 
-          <section className="py-20 bg-gradient-to-b from-black via-gray-900 to-black" id="aboutme">
-            <div className="container m-auto px-6">
+          <section className="py-20 bg-gradient-to-b from-black via-gray-900 to-black relative" id="aboutme">
+            <div className="absolute inset-0 dot-grid opacity-15"></div>
+            <div className="container m-auto px-6 relative z-10">
               <div className="text-center mb-16">
+                <p className="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">My Journey</p>
                 <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
                   About Me
                 </h2>
-                <p className="text-gray-400 text-lg">My journey and experience</p>
+                <p className="text-gray-400 text-lg">Education & experience</p>
               </div>
               
               <div className="max-w-4xl mx-auto">
@@ -1669,25 +1461,24 @@ function App() {
           </section>
         </section>
       </main>
-      <footer className="bg-black border-t border-gray-800">
-        <div className="container m-auto px-6 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-center md:text-left">
-              <p className="text-gray-400 text-sm">
-                © 2024 Shivam Parashar. All rights reserved.
-              </p>
-              <p className="text-gray-500 text-xs mt-1">
-                Built with React & Tailwind CSS
-              </p>
-            </div>
-            <div className="flex gap-4">
+      <footer className="bg-black relative">
+        <div className="section-divider"></div>
+        <div className="container m-auto px-6 py-12">
+          <div className="flex flex-col items-center gap-6">
+            <h3 className="font-bold text-xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              Shivam Parashar
+            </h3>
+            <p className="text-gray-500 text-sm text-center max-w-md">
+              React Native Developer building mobile & web experiences with modern technologies.
+            </p>
+            <div className="flex gap-3">
               <a
                 href="https://github.com/shivamparashar30"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group"
               >
-                <div className="w-10 h-10 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:bg-gray-800 hover:shadow-lg hover:shadow-cyan-500/20">
+                <div className="w-10 h-10 bg-gray-900/50 border border-gray-800 hover:border-cyan-500 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-gray-800 hover:shadow-lg hover:shadow-cyan-500/20 hover:-translate-y-1">
                   <img src={Github} className="w-5 h-5 group-hover:scale-110 transition-transform" alt="GitHub" />
                 </div>
               </a>
@@ -1697,11 +1488,15 @@ function App() {
                 rel="noopener noreferrer"
                 className="group"
               >
-                <div className="w-10 h-10 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:bg-gray-800 hover:shadow-lg hover:shadow-cyan-500/20">
+                <div className="w-10 h-10 bg-gray-900/50 border border-gray-800 hover:border-cyan-500 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-gray-800 hover:shadow-lg hover:shadow-cyan-500/20 hover:-translate-y-1">
                   <img src={LinkedIn} className="w-5 h-5 group-hover:scale-110 transition-transform" alt="LinkedIn" />
                 </div>
               </a>
             </div>
+            <div className="w-16 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"></div>
+            <p className="text-gray-600 text-xs">
+              © 2025 Shivam Parashar. Built with React & Tailwind CSS
+            </p>
           </div>
         </div>
         {scrolling && (
