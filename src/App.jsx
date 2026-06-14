@@ -891,6 +891,7 @@ import Project10 from "./assets/images/pulse care.png";
 import LinkedIn from "./assets/linkedin.svg";
 import Github from "./assets/github.svg";
 import ArrowDown from "./assets/arrow-down.svg";
+import Resume from "./assets/file/Shivam_s_Resume_June_26.pdf";
 import { useEffect, useState, useRef } from "react";
 
 function App() {
@@ -898,6 +899,7 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [visibleCards, setVisibleCards] = useState(new Set());
   const [activeTab, setActiveTab] = useState("mobile");
+  const [tabTransition, setTabTransition] = useState(false);
   const projectRefs = useRef([]);
 
   const onPageScroll = () => {
@@ -937,6 +939,29 @@ function App() {
     setMobileMenuOpen(false);
   };
 
+  const smoothScroll = (e, href) => {
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (!target) return;
+    const targetPos = target.getBoundingClientRect().top + window.pageYOffset - 80;
+    const startPos = window.pageYOffset;
+    const distance = targetPos - startPos;
+    const duration = 1200;
+    let startTime = null;
+
+    const easeInOutCubic = (t) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    const step = (currentTime) => {
+      if (!startTime) startTime = currentTime;
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      window.scrollTo(0, startPos + distance * easeInOutCubic(progress));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
   return (
     <>
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolling ? 'bg-gray-900/90 backdrop-blur-xl border-b border-gray-800/50 shadow-lg shadow-black/20' : 'bg-transparent'}`}>
@@ -960,6 +985,7 @@ function App() {
                   <li key={item.href}>
                     <a
                       href={item.href}
+                      onClick={(e) => smoothScroll(e, item.href)}
                       className="text-gray-300 hover:text-cyan-400 cursor-pointer transition-colors duration-300 font-medium link-underline"
                     >
                       {item.label}
@@ -984,42 +1010,22 @@ function App() {
           {/* Mobile Menu */}
           <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${mobileMenuOpen ? 'max-h-96 opacity-100 mt-6' : 'max-h-0 opacity-0'}`}>
             <ul className="flex flex-col gap-4 pb-4">
-              <li>
-                <a
-                  href="#home"
-                  onClick={closeMobileMenu}
-                  className="block text-gray-300 hover:text-cyan-400 cursor-pointer transition-all duration-300 font-medium py-2 px-4 hover:bg-gray-800/50 rounded-lg"
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#projects"
-                  onClick={closeMobileMenu}
-                  className="block text-gray-300 hover:text-cyan-400 cursor-pointer transition-all duration-300 font-medium py-2 px-4 hover:bg-gray-800/50 rounded-lg"
-                >
-                  Projects
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#technologies"
-                  onClick={closeMobileMenu}
-                  className="block text-gray-300 hover:text-cyan-400 cursor-pointer transition-all duration-300 font-medium py-2 px-4 hover:bg-gray-800/50 rounded-lg"
-                >
-                  Skills
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#aboutme"
-                  onClick={closeMobileMenu}
-                  className="block text-gray-300 hover:text-cyan-400 cursor-pointer transition-all duration-300 font-medium py-2 px-4 hover:bg-gray-800/50 rounded-lg"
-                >
-                  About
-                </a>
-              </li>
+              {[
+                { href: "#home", label: "Home" },
+                { href: "#projects", label: "Projects" },
+                { href: "#technologies", label: "Skills" },
+                { href: "#aboutme", label: "About" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    onClick={(e) => { closeMobileMenu(); smoothScroll(e, item.href); }}
+                    className="block text-gray-300 hover:text-cyan-400 cursor-pointer transition-all duration-300 font-medium py-2 px-4 hover:bg-gray-800/50 rounded-lg"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -1102,15 +1108,19 @@ function App() {
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 animate-fade-in-up animation-delay-800">
                   <a
                     href="#projects"
+                    onClick={(e) => smoothScroll(e, "#projects")}
                     className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 rounded-xl font-semibold text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transition-all duration-500 transform hover-tilt hover:scale-105 active:scale-95 text-center"
                   >
                     View My Work
                   </a>
                   <a
-                    href="#aboutme"
-                    className="px-8 py-4 bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:border-cyan-500 rounded-xl font-semibold text-white transition-all duration-500 hover:bg-gray-800 hover-tilt text-center"
+                    href={Resume}
+                    download="Shivam_Parashar_Resume.pdf"
+                    className="px-8 py-4 bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:border-cyan-500 rounded-xl font-semibold text-white transition-all duration-500 hover:bg-gray-800 hover-tilt text-center flex items-center justify-center gap-2"
                   >
-                    About Me
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Resume
                   </a>
                 </div>
                 <div className="flex gap-6 pt-6 animate-fade-in-up animation-delay-1000">
@@ -1169,7 +1179,7 @@ function App() {
             <div className="flex justify-center mb-8 md:mb-12">
               <div className="inline-flex bg-gray-900/80 backdrop-blur-sm rounded-xl p-1.5 border border-gray-800">
                 <button
-                  onClick={() => setActiveTab("mobile")}
+                  onClick={() => { setTabTransition(true); setTimeout(() => { setActiveTab("mobile"); setTabTransition(false); }, 200); }}
                   className={`px-5 md:px-8 py-2.5 md:py-3 rounded-lg text-sm md:text-base font-semibold transition-all duration-500 ${
                     activeTab === "mobile"
                       ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-cyan-500/30"
@@ -1179,7 +1189,7 @@ function App() {
                   Mobile Apps
                 </button>
                 <button
-                  onClick={() => setActiveTab("web")}
+                  onClick={() => { setTabTransition(true); setTimeout(() => { setActiveTab("web"); setTabTransition(false); }, 200); }}
                   className={`px-5 md:px-8 py-2.5 md:py-3 rounded-lg text-sm md:text-base font-semibold transition-all duration-500 ${
                     activeTab === "web"
                       ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-cyan-500/30"
@@ -1192,18 +1202,18 @@ function App() {
             </div>
 
             {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
+            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto transition-all duration-300 ${tabTransition ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
 
               {[
-                { img: Project1, title: "All In One Donation App", desc: "Streamlines donations using React Native, MongoDB, Node.js and Express.js.", tags: ["React Native", "MongoDB", "Node.js"], link: "https://github.com/shivamparashar30/AIOD-FrontEnd", type: "mobile" },
-                { img: Project2, title: "Furniture Ecommerce", desc: "Furniture E-commerce Store, built with React Native, MongoDB, Node.js and Express.js.", tags: ["React Native", "MongoDB", "Express.js"], link: "https://github.com/shivamparashar30/FurnitureApp-FrontEnd", type: "mobile" },
+                { img: Project1, title: "All In One Donation", desc: "All-in-one donation app enabling donations of clothes, money, food, and books with secure backend.", tags: ["React Native", "MongoDB", "Express.js"], link: "https://github.com/shivamparashar30/AIOD-FrontEnd", type: "mobile" },
+                { img: Project2, title: "Furniture Ecommerce", desc: "Modern furniture shopping app with product browsing, cart management, and real-time listings.", tags: ["React Native", "MongoDB", "Node.js"], link: "https://github.com/shivamparashar30/FurnitureApp-FrontEnd", type: "mobile" },
                 { img: Project3, title: "Food Ordering App", desc: "Food Ordering App using React Native and MongoDB.", tags: ["React Native", "MongoDB", "Node.js"], link: "https://github.com/shivamparashar30/Food-order-app", type: "mobile" },
                 { img: Project5, title: "Movie Ticket Booking", desc: "Complete movie ticket booking solution with React Native, MongoDB, Node.js and Express.js.", tags: ["React Native", "MongoDB", "Express.js"], link: "https://github.com/shivamparashar30/Movie-Ticket-Booking-App", type: "mobile" },
                 { img: Project7, title: "Body Fat Calculator", desc: "AI-powered body fat percentage calculator using React Native and TensorFlow.", tags: ["React Native", "TensorFlow", "AI/ML"], link: "https://github.com/shivamparashar30/Body-Fat-Calculator", type: "mobile" },
-                { img: Project10, title: "Pulse Care", desc: "Healthcare monitoring platform for real-time patient vitals tracking.", tags: ["React Native", "Node.js", "MongoDB"], link: "https://github.com/shivamparashar30/PulseCare", type: "mobile" },
-                { img: Project4, title: "AI Skill Scan", desc: "AI-powered skill assessment platform with ATS scoring and resume analysis.", tags: ["React.js", "AI", "Node.js"], link: "https://ai-skill-scan-main.vercel.app/", type: "web" },
+                { img: Project10, title: "Pulse Care", desc: "Healthcare platform for seamless appointment management and patient-doctor interactions.", tags: ["React.js", "REST APIs", "Auth"], link: "https://github.com/shivamparashar30/PulseCare", type: "mobile" },
+                { img: Project4, title: "AI Skill Scan", desc: "AI-powered resume scanning platform with real-time skill analysis and job alignment using Puter.js.", tags: ["React.js", "AI", "Puter.js"], link: "https://ai-skill-scan-main.vercel.app/", type: "web" },
                 { img: Project6, title: "Admin Dashboard", desc: "Comprehensive admin dashboard for database management built with React.js.", tags: ["React.js", "Dashboard", "Database"], link: "https://admindbshivam.vercel.app", type: "web" },
-                { img: Project8, title: "Cadence", desc: "A modern coding practice and DSA preparation platform.", tags: ["React.js", "Node.js", "MongoDB"], link: "https://cadence-prep.vercel.app/", type: "web" },
+                { img: Project8, title: "Cadence", desc: "Interview prep platform with 150+ DSA problems, interactive roadmaps, progress tracking, and focus timer.", tags: ["React.js", "Node.js", "MongoDB"], link: "https://cadence-prep.vercel.app/", type: "web" },
                 { img: Project9, title: "Spendly", desc: "Smart expense tracking and budget management dashboard.", tags: ["React.js", "Firebase", "Analytics"], link: "https://github.com/shivamparashar30/spendly", type: "web" },
               ]
                 .filter((project) => project.type === activeTab)
@@ -1306,7 +1316,7 @@ function App() {
                       Developer Tools
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                      {["Git", "GitHub", "VS Code", "Postman", "Figma", "Android Studio"].map((skill, i) => (
+                      {["Git", "GitHub", "VS Code", "Postman", "Figma", "Jira", "Android Studio", "Xcode", "Vercel"].map((skill, i) => (
                         <span
                           key={i}
                           className="px-4 py-2 text-sm font-medium bg-purple-500/10 text-purple-300 rounded-full border border-purple-500/20 hover:border-purple-400/50 hover:bg-purple-500/20 hover:-translate-y-0.5 transition-all duration-300 cursor-default"
@@ -1368,10 +1378,11 @@ function App() {
                       <div className="ml-20 md:ml-0 md:w-1/2 md:pr-12">
                         <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
                           <span className="inline-block px-4 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm font-semibold border border-blue-500/30 mb-3">
-                            2022
+                            July 2019 - May 2022
                           </span>
                           <h3 className="text-xl font-bold mb-2 text-white">Bachelor of Computer Applications</h3>
                           <p className="text-gray-400">Aryan College, Ajmer</p>
+                          <p className="text-gray-500 text-sm mt-1">CGPA: 7.7/10</p>
                         </div>
                       </div>
                     </div>
@@ -1382,10 +1393,11 @@ function App() {
                       <div className="ml-20 md:ml-0 md:w-1/2 md:pl-12">
                         <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
                           <span className="inline-block px-4 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm font-semibold border border-cyan-500/30 mb-3">
-                            2024
+                            Oct 2022 - July 2024
                           </span>
                           <h3 className="text-xl font-bold mb-2 text-white">Master of Computer Applications</h3>
                           <p className="text-gray-400">PES University, Bangalore</p>
+                          <p className="text-gray-500 text-sm mt-1">CGPA: 8.2/10</p>
                         </div>
                       </div>
                     </div>
@@ -1396,33 +1408,33 @@ function App() {
                       <div className="ml-20 md:ml-0 md:w-1/2 md:pr-12">
                         <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-cyan-500/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
                           <span className="inline-block px-4 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm font-semibold border border-purple-500/30 mb-3">
-                            Jul 2024 - Dec 2024
+                            Feb 2024 - Dec 2024
                           </span>
-                          <h3 className="text-xl font-bold mb-2 text-cyan-400">Software Developer Intern</h3>
+                          <h3 className="text-xl font-bold mb-2 text-cyan-400">React Native Developer</h3>
                           <p className="text-white font-semibold mb-3">Tigbar (Remote)</p>
                           <ul className="space-y-2 text-gray-400">
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
-                              <span>Worked on cross-platform app development using React Native</span>
+                              <span>Built cross-platform apps using React Native with smooth performance on iOS and Android</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
-                              <span>Collaborated with teams using Agile methodologies and Jira</span>
+                              <span>Facilitated Agile ceremonies and used Jira for sprint tracking and task management</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
-                              <span>Utilized Redux Toolkit for efficient state management</span>
+                              <span>Implemented Redux Toolkit for state management, improving app efficiency</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
-                              <span>Used GitHub for version control and seamless code integration</span>
+                              <span>Collaborated via GitHub for version control and seamless code integration</span>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
 
-                    {/* Current Position - Grofo */}
+                    {/* Current Position - Chemflo */}
                     <div className="relative flex items-center md:flex-row-reverse">
                       <div className="absolute left-8 md:left-1/2 w-4 h-4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full border-4 border-gray-900 transform -translate-x-1/2 z-10 animate-pulse"></div>
                       <div className="ml-20 md:ml-0 md:w-1/2 md:pl-12">
@@ -1430,24 +1442,24 @@ function App() {
                           <span className="inline-block px-4 py-1 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 text-cyan-300 rounded-full text-sm font-semibold border border-cyan-500/50 mb-3">
                             Jan 2025 - Present
                           </span>
-                          <h3 className="text-xl font-bold mb-2 text-cyan-400">Front-End Developer</h3>
-                          <p className="text-white font-semibold mb-3">Grofo (Remote)</p>
+                          <h3 className="text-xl font-bold mb-2 text-cyan-400">Software Engineer</h3>
+                          <p className="text-white font-semibold mb-3">Chemflo (Remote)</p>
                           <ul className="space-y-2 text-gray-300">
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
-                              <span>Developing comprehensive CRM solutions for chemical companies using React.js</span>
+                              <span>Built 5+ web and mobile apps from scratch, including a complete CRM system using React.js and React Native</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
-                              <span>Creating user-centered interfaces in Figma with focus on client satisfaction</span>
+                              <span>Delivered responsive CRM solutions and mobile apps for chemical companies and field representatives</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
-                              <span>Managing complete development lifecycle from requirements to deployment</span>
+                              <span>Converted Figma designs into responsive web applications with clean, user-friendly interfaces</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-cyan-400 mt-1">▹</span>
-                              <span>Building responsive web applications using modern technologies</span>
+                              <span>Managed Play Store and App Store deployments, push notifications, and manual testing for production apps</span>
                             </li>
                           </ul>
                         </div>
@@ -1503,9 +1515,7 @@ function App() {
           <div className="fixed bottom-8 right-8 z-50">
             <button
               className="w-12 h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transition-all duration-300 transform hover:scale-110"
-              onClick={() => {
-                window.scrollTo(0, 0);
-              }}
+              onClick={(e) => smoothScroll(e, "#home")}
               aria-label="Scroll to top"
             >
               <img src={ArrowDown} className="w-6 h-6 rotate-180" alt="Scroll to top" />
