@@ -1023,7 +1023,7 @@ function App() {
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolling || mobileMenuOpen ? 'bg-gray-900/95 backdrop-blur-xl border-b border-gray-800/50 shadow-lg shadow-black/20' : 'bg-transparent'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolling || mobileMenuOpen ? 'bg-gray-950 backdrop-blur-xl border-b border-gray-800/50 shadow-lg shadow-black/20' : 'bg-transparent'}`}>
         <div className="container m-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div>
