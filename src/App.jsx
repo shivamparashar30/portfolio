@@ -1156,9 +1156,7 @@ function App() {
                   <span className="text-cyan-400 animate-pulse">|</span>
                 </h2>
                 <p className="text-base md:text-lg text-gray-400 leading-relaxed max-w-2xl animate-fade-in-up animation-delay-600">
-                  I am a skilled React Native Developer specializing in creating
-                  efficient, user-friendly mobile applications with a focus on
-                  community engagement and cutting-edge technology.
+                  Experienced React Native and React.js Developer with hands-on full-stack development expertise. Skilled in building scalable mobile and web applications, application testing, debugging, deployment, and delivering high-performance solutions in Agile environments. Strong collaborator with the ability to work independently or within teams, in both remote and onsite environments.
                 </p>
                 <div className="animate-fade-in-up animation-delay-600">
                   <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-sm text-emerald-400 font-medium">
