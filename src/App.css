@@ -1023,3 +1023,91 @@ button, a, input, textarea {
 .menu-item:nth-child(4) {
   animation-delay: 0.4s;
 }
+
+/* Scroll to top rocket button */
+.scroll-top-btn {
+  animation: rocketEntry 0.5s ease-out;
+}
+
+@keyframes rocketEntry {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.scroll-top-btn:hover .rocket-icon {
+  animation: rocketShake 0.4s ease-in-out infinite;
+}
+
+@keyframes rocketShake {
+  0%, 100% { transform: translateY(-2px) rotate(-2deg); }
+  50% { transform: translateY(-4px) rotate(2deg); }
+}
+
+@keyframes flame {
+  0%, 100% { transform: scaleY(1); opacity: 0.8; }
+  50% { transform: scaleY(1.6); opacity: 1; }
+}
+
+.animate-flame {
+  animation: flame 0.3s ease-in-out infinite;
+}
+
+.animation-delay-100 {
+  animation-delay: 0.1s;
+}
+
+/* Rocket launch animation */
+.rocket-launch {
+  animation: rocketTakeoff 1.2s ease-in forwards;
+  pointer-events: none;
+}
+
+.rocket-launch .rocket-icon {
+  animation: rocketShake 0.1s ease-in-out infinite !important;
+}
+
+@keyframes rocketTakeoff {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  10% {
+    transform: translateY(2px) scale(1.05);
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  }
+  25% {
+    transform: translateY(-10px) scale(1.1);
+    opacity: 1;
+    box-shadow: 0 0 40px rgba(6, 182, 212, 0.6);
+  }
+  100% {
+    transform: translateY(-120vh) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes exhaust {
+  0% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0.8; transform: scaleY(1.8); }
+  100% { opacity: 0.5; transform: scaleY(1); }
+}
+
+.animate-exhaust {
+  animation: exhaust 0.3s ease-in-out infinite;
+}
+
+@keyframes smoke {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+.animate-smoke {
+  animation: smoke 0.8s ease-out forwards;
+}
